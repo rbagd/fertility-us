@@ -1,0 +1,16 @@
+#!/bin/bash
+
+for i in {1968..1993}
+do
+  filename=$(unzip -l Nat$i.zip | sed -n '4p' | awk '{ print $4 }')
+  unzip Nat$i.zip
+  mv $filename $i
+done
+
+for i in {1994..2013}
+do
+  suffix='us.zip'
+  filename=$(unzip -l Nat$i$suffix | sed -n '4p' | awk '{ print $4 }')
+  unzip Nat$i$suffix
+  mv $filename $i
+done
