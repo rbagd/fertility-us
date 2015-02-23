@@ -1,0 +1,37 @@
+#! /bin/bash
+#
+# All files are downloaded directly from CDC website and are named
+# accordingly to the year of reference. Column positions relevant
+# to the data studied were checked manually for each year. This script
+# extracts chese columns and saves them in smaller files that can then
+# be treated with R. Some years have specific problems and have to be
+# treated separately.
+
+echo "$(cut -c38,39 1968)" >> "age_1968"
+echo "$(cut -c47,48 1968)" >> "child_1968"
+
+for i in {1969..1988}
+do
+	echo "$(cut -c41,42 $i)" >> "age_$i"
+	echo "$(cut -c81 $i)" >> "child_$i"
+done
+
+for i in {1989..2002}
+do
+	echo "$(cut -c70,71 $i)" >> "age_$i"
+	echo "$(cut -c201 $i)" >> "child_$i"
+done
+
+# Only recoded mother's age data available for 2003, otherwise it's unknown.
+# Convert it back using R.
+
+echo "$(cut -c89,90 2003)" >> "age_2003"
+echo "$(cut -c423 2003)" >> "child_2003"
+
+for i in {2004..2013}
+do
+	echo "$(cut -c89,90 $i)" >> "age_$i"
+	echo "$(cut -c423 $i)" >> "child_$i"
+done
+
+exit 0
