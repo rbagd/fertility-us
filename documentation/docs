@@ -1,0 +1,27 @@
+#!/bin/bash
+
+link='ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Dataset_Documentation/DVS/natality/'
+
+# Pre-1978 is treated separately
+
+wget ${link}Nat1968doc.pdf
+wget ${link}Nat1969-71doc.pdf
+wget ${link}Nat1972-77doc.pdf
+
+# Post-1978 can be automatized
+
+prefix='Nat'
+suffix='doc.pdf'
+
+for i in {1978..2004}
+do
+  wget $link$prefix$i$suffix
+done
+
+prefix='UserGuide'
+suffix='.pdf'
+
+for i in {2005..2013}
+do
+  wget $link$prefix$i$suffix
+done
