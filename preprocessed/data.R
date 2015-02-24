@@ -13,8 +13,6 @@ twin_births <- dbFetch(rs2, -1)
 
 dbDisconnect(con)
 
-
-
 # Data treatment
 
 library(plyr)
@@ -58,8 +56,8 @@ plotf <- function(x, title, legend) {
   p <- ggplot(x, aes(x=age, y=density, group=year, col=year)) +
           geom_line() +
           xlab("Mother's age") + ylab("Density") +
-          theme(text = element_text(size=10), plot.title=element_text(size=10), legend.position=position,
-                legend.title=element_text(size=8)) + 
+          theme(text = element_text(size=14), plot.title=element_text(size=16), legend.position=position,
+                legend.title=element_text(size=14)) + 
           ggtitle(title) +
           scale_colour_continuous(name="Year", breaks=c(1971, 1980, 1990,2000,2010), low="green", high="blue")
   return(p)
