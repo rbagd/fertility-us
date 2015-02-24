@@ -111,8 +111,8 @@ allEstimators$variable <- factor(allEstimators$variable, levels=c("galerkin.four
 p <- ggplot(allEstimators, aes(x=age, y=value)) + geom_line(aes(color=variable, linetype=variable)) +
      geom_point(aes(x=age, y=value, color=variable, shape=variable), size=3) +
      xlab("Mother's age") + ylab("") +
-     theme(text = element_text(size=10), plot.title=element_text(size=10), legend.position="bottom",
-           legend.title=element_blank(), legend.key.width=unit(1.5, "cm")) +
+     theme(text = element_text(size=16), plot.title=element_text(size=14), legend.position="bottom",
+           legend.title=element_blank(), legend.key.width=unit(2.5, "cm")) +
      scale_color_manual(values=c("blue", "darkgreen", "darkred", "black")) +
      scale_y_continuous(limits=c(-3,2.5)) +
      ggtitle("Estimates of regressand function on growth of GDP/capita")
