@@ -5,11 +5,11 @@ link='ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/DVS/natality/Nat'
 suffix='.zip'
 for i in {1968..1993}
 do
-  wget $link$i$suffix
+  wget -N $link$i$suffix
 done
 
 suffix='us.zip'
 for i in {1994..2013}
 do
-  wget $link$i$suffix
+  wget -N $link$i$suffix
 done
