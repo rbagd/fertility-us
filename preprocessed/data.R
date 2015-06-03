@@ -91,7 +91,7 @@ w <- matrix(twin_births$density, nrow=length(years), ncol=length(age), byrow=TRU
 wav_x <- x[,4:35]; wav_w <- w[,4:35] # Wavelets need domain length to be 2^k
 
 fit <- endogenousEstimation(x=t(x)*1000, w=t(w)*1000, y=y,
-                            basis="fourier", M=7, domain=c(0,1),
+                            basis="fourier", m=7, domain=c(0,1),
                             PCA=TRUE, pca.dim=6,
                             tikhonov=TRUE, tikhonov.alpha=0.05)
 fitw <- waveletEndogenous(x=t(wav_x)*2000, w=t(wav_w)*2000, y=y, verbose=FALSE,
@@ -118,3 +118,36 @@ p <- ggplot(allEstimators, aes(x=age, y=value)) + geom_line(aes(color=variable, 
      ggtitle("Estimates of regressand function on growth of GDP/capita")
 print(p) 
 
+# Fourier confidence interval
+ww <- t(w)*1000
+xx <- t(x)*1000
+demean <- function(z) { z - mean(z) }
+ww <- t(apply(ww, 1, demean))
+xx <- t(apply(xx, 1, demean))
+step <- 1/(nrow(xx)-1); n <- ncol(xx)
+sigma.f <- as.numeric(var(y - (1000*x %*% fit$galest_endoSA)*step))
+That <- step*(ww %*% t(xx))/n; Sigma <- step*(ww %*% t(ww))/n; TST <- That %*% Sigma %*% t(That)
+project <- t(fit$basis_values) %*% TST %*% fit$basis_values * step^2
+gm <- diag(1, 38) %*% (fit$basis_values)*step
+aa <- sigma.f * solve(fit$gal_matrix) %*% project %*% solve(fit$gal_matrix) / n
+bound <- 1.96*sqrt(diag(gm %*% aa %*% t(gm))) 
+plot(age[age_span], fit$galest_endoSA[age_span], type='l', xlab="Age", ylab="", ylim=c(-3,2))
+lines(age[age_span], (fit$galest_endoSA - bound)[age_span], col="red")
+lines(age[age_span], (fit$galest_endoSA + bound)[age_span], col="red")
+
+pred <- as.data.frame(cbind(age=age[age_span], galerkin.fourier=fit$galest_endoSA[age_span]))
+pred <- melt(pred, id.var="age")
+pred$variable <- factor(pred$variable, levels=c("galerkin.fourier"), labels=c("Fourier basis estimator"))
+pred$upper <- (fit$galest_endoSA+bound)[age_span]
+pred$lower <- (fit$galest_endoSA-bound)[age_span]
+png(filename="confidence.png", width=670, height=460)
+p <- ggplot(pred, aes(x=age,y=value)) + geom_line(data=pred) + geom_smooth(aes(ymin=lower,ymax=upper), stat="identity") +
+     geom_point(aes(x=age, y=value, color=variable, shape=variable), size=3) +
+     xlab("") + ylab("") +
+     theme(text = element_text(size=16), plot.title=element_text(size=14), legend.position="bottom",
+           legend.title=element_blank(), legend.key.width=unit(2.5, "cm")) +
+     scale_color_manual(values=c("blue", "darkgreen", "darkred", "black")) +
+     scale_y_continuous(limits=c(-3,2.5)) +
+     ggtitle("Estimates of regressand function on growth of GDP/capita")
+print(p)
+dev.off()
