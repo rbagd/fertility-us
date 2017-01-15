@@ -6,15 +6,15 @@ import csv
 # columns with bash into files of type 'age_1976'. The rest of the code is 
 # then a hack to put it all into a SQLite database.
 
-os.chdir('/home/rytis/Downloads/downloads_birth/preprocessed')
 conn = sqlite3.connect('data.db')
+os.chdir('../zips/extracted/')
 c = conn.cursor()
 c.execute("CREATE TABLE data (id integer primary key autoincrement, age integer, children integer, year integer)")
 conn.commit()
 
 names = ['age_', 'child_']
 
-years = range(1971, 2014)
+years = range(1971, 2016)
 
 for year in years:
     print(year) # Just to see where the loop is
