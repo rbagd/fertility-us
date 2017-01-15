@@ -17,3 +17,5 @@ python preprocessed/data.py
 Rscript preprocessed/data.R
 ```
 Be aware that some extra dependencies are necessary, notably `sqlite` module for `Python` as well as `RSQLite` library for `R`. Some additional libraries for `R` are useful to treat raw data and obtain plots.
+
+Plurality data for 1969 and 1970, i.e. number of children at birth, are not available. `SQLite` database is therefore constructed from 1971 only.
