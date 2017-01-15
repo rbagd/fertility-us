@@ -7,10 +7,15 @@ do
   mv $filename $i
 done
 
-for i in {1994..2013}
+for i in {1994..2014}
 do
   suffix='us.zip'
   filename=$(unzip -l Nat$i$suffix | sed -n '4p' | awk '{ print $4 }')
   unzip Nat$i$suffix
   mv $filename $i
 done
+
+# Data for 2015 uses a more efficient compression algorithm.
+# In Debian-based systems, this is available in p7zip-full package.
+7z e -mm=PPMd Nat2015us.zip
+mv Nat2015PublicUS.c20160517.r20160907.txt 2015
