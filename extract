@@ -34,4 +34,11 @@ do
 	echo "$(cut -c423 $i)" >> "child_$i"
 done
 
+for i in {2014..2015}
+do
+  echo "$(cut -c75,76 $i)" >> "age_$i"
+  echo "$(cut -c454 $i)" >> "child_$i"
+done
+
+
 exit 0
